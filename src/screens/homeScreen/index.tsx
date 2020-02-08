@@ -1,21 +1,54 @@
 import React, {Component} from 'react';
-import {View, Image, Text} from 'react-native';
-import {Icon} from 'native-base';
+import {
+  View,
+  Image,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
+import {Icon, Fab} from 'native-base';
 
 import {styles} from './styles';
+import SearchItem from '../_components/searchItem';
+
+const animationValue = new Animated.Value(0);
+const AnimatableTextInput = Animated.createAnimatedComponent(TouchableOpacity);
 
 export default class HomeScreen extends Component {
+  moveTextInput = () => {
+    Animated.timing(animationValue, {
+      toValue: -150,
+      duration: 1500,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  handleTextInputPress = () => {
+    this.moveTextInput();
+  };
+
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
+        <Fab position="topRight" style={styles.fab}>
+          <Text>A</Text>
+        </Fab>
+
         <Image
           source={require('../../images/google.png')}
           style={styles.logo}
         />
-        <View style={styles.inputWrapper}>
+
+        <AnimatableTextInput
+          style={[
+            styles.inputWrapper,
+            {transform: [{translateY: animationValue}]},
+          ]}
+          onPress={this.handleTextInputPress}>
           <Text style={styles.sayHeyText}>Say "Hey Google"</Text>
           <Icon name="mic" style={styles.mic} />
-        </View>
+        </AnimatableTextInput>
 
         <View style={styles.weatherSection}>
           <Icon
@@ -43,7 +76,19 @@ export default class HomeScreen extends Component {
             style={styles.moreIcon}
           />
         </View>
-      </View>
+
+        <SearchItem
+          title="Bolt, Uber Under Fire as Lagos State Clamps Down on Commercial Drivers"
+          content="Bolt, Uber, OCar and other ride-hailing startups have co..."
+          thumbnail={require('../../images/uber.jpeg')}
+        />
+
+        <SearchItem
+          title="Top 3 VS Code Extensions for Python and Data Science"
+          content="IDE's are awesome. If you don't know what an IDE is, it..."
+          thumbnail={require('../../images/vs_code.jpeg')}
+        />
+      </ScrollView>
     );
   }
 }

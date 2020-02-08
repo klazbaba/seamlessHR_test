@@ -4,7 +4,7 @@ import {colors} from '../../colors';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: colors.white,
     alignItems: 'center',
     padding: 16,
@@ -13,7 +13,8 @@ export const styles = StyleSheet.create({
   logo: {
     height: 50,
     width: 160,
-    marginBottom: 32,
+    marginBottom: 24,
+    marginTop: 64
   },
   inputWrapper: {
     borderWidth: 1,
@@ -26,11 +27,13 @@ export const styles = StyleSheet.create({
   },
   mic: {
     marginHorizontal: 16,
+    color: colors.green,
   },
   sayHeyText: {
     marginVertical: 16,
     color: colors.grey,
     fontSize: 16,
+    marginRight: 8,
   },
   weatherSection: {
     flexDirection: 'row',
@@ -41,6 +44,8 @@ export const styles = StyleSheet.create({
     elevation: 1,
     backgroundColor: colors.white,
     justifyContent: 'space-between',
+    marginBottom: 16,
+    alignItems: 'center'
   },
   weatherIcon: {
     color: colors.yellow,
@@ -48,6 +53,7 @@ export const styles = StyleSheet.create({
   },
   moreIcon: {
     color: colors.grey,
+    fontSize: 22
   },
   bottomRow: {
     flexDirection: 'row',
@@ -60,5 +66,13 @@ export const styles = StyleSheet.create({
   },
   smallText: {
     fontSize: 12,
+  },
+  fab: {
+    backgroundColor: colors.green,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    top: 0,
+    elevation: 0
   },
 });
