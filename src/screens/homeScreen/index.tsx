@@ -33,7 +33,7 @@ class HomeScreen extends Component<Props> {
 
     Animated.timing(animationValue, {
       toValue: moveTo,
-      duration: 900,
+      duration: 800,
       useNativeDriver: true,
     }).start(() => toggleModal(showModal));
   };
