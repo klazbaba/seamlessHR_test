@@ -8,14 +8,22 @@ import {
   Animated,
 } from 'react-native';
 import {Icon, Fab} from 'native-base';
+import {connect} from 'react-redux';
 
 import {styles} from './styles';
 import SearchItem from '../_components/searchItem';
+import {showModal} from '../../actions';
+import {colors} from '../../colors';
 
 const animationValue = new Animated.Value(0);
 const AnimatableTextInput = Animated.createAnimatedComponent(TouchableOpacity);
 
-export default class HomeScreen extends Component {
+interface Props {
+  showModal: boolean;
+  toggleModal: (state: boolean) => void;
+}
+
+class HomeScreen extends Component<Props> {
   moveTextInput = () => {
     Animated.timing(animationValue, {
       toValue: -150,
@@ -25,10 +33,15 @@ export default class HomeScreen extends Component {
   };
 
   handleTextInputPress = () => {
+    this.props.toggleModal(true);
     this.moveTextInput();
   };
 
+  componentDidMount = () => this.props.toggleModal(false);
+
   render() {
+    const {showModal} = this.props;
+
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <Fab position="topRight" style={styles.fab}>
@@ -44,6 +57,7 @@ export default class HomeScreen extends Component {
           style={[
             styles.inputWrapper,
             {transform: [{translateY: animationValue}]},
+            {backgroundColor: showModal ? colors.lightgrey : null},
           ]}
           onPress={this.handleTextInputPress}>
           <Text style={styles.sayHeyText}>Say "Hey Google"</Text>
@@ -92,3 +106,13 @@ export default class HomeScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  showModal: state.toggleModal.showModal,
+});
+
+const mapDispatchToProps = dispatch => ({
+  toggleModal: state => dispatch(showModal(state)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
