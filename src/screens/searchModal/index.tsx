@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ScrollView, View, TextInput} from 'react-native';
 import {Icon} from 'native-base';
+import {debounce} from 'lodash';
 
 import {styles} from './styles';
 import SearchItem from './_components/searchItem';
@@ -9,6 +10,7 @@ interface Props {}
 
 interface State {
   text: string;
+  filteredData: Array<string>;
 }
 
 const mockData = require('../../mockData.json');
@@ -16,13 +18,30 @@ const mockData = require('../../mockData.json');
 export default class SearchModal extends Component<Props, State> {
   state = {
     text: '',
+    filteredData: [],
   };
 
   handleTextChange = text => {
     this.setState({text});
+    this.filterData();
+  };
+
+  filterData = debounce(() => {
+    const {text, filteredData} = this.state;
+
+    this.setState({filteredData: []});
     for (const item in mockData) {
-      if (item.toLowerCase().includes(text.toLowerCase())) console.warn(item);
+      if (item.toLowerCase().includes(text.toLowerCase())) {
+        filteredData.push(item);
+        this.setState({filteredData});
+      }
     }
+  }, 1000);
+
+  renderFilteredItems = () => {
+    const {filteredData} = this.state;
+
+    return filteredData.map(item => <SearchItem label={item} />);
   };
 
   render() {
@@ -41,7 +60,7 @@ export default class SearchModal extends Component<Props, State> {
           <Icon name="mic" style={styles.micIcon} />
         </View>
 
-        <SearchItem label="Enu gbe!" />
+        {this.renderFilteredItems()}
       </ScrollView>
     );
   }
