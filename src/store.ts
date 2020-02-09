@@ -1,7 +1,7 @@
 import {createStore, combineReducers} from 'redux';
-import {toggleModal} from './reducers';
+import {toggleModal, toggleBackgroundColor} from './reducers';
 
-const rootReducer = combineReducers({toggleModal});
+const rootReducer = combineReducers({toggleModal, toggleBackgroundColor});
 
 const configureStore = () => createStore(rootReducer);
 

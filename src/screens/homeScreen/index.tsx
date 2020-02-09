@@ -6,13 +6,14 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
+  Modal,
 } from 'react-native';
 import {Icon, Fab} from 'native-base';
 import {connect} from 'react-redux';
 
 import {styles} from './styles';
 import SearchItem from '../_components/searchItem';
-import {showModal} from '../../actions';
+import {showModal, changeTextInputBackgroundColor} from '../../actions';
 import {colors} from '../../colors';
 
 const animationValue = new Animated.Value(0);
@@ -21,26 +22,38 @@ const AnimatableTextInput = Animated.createAnimatedComponent(TouchableOpacity);
 interface Props {
   showModal: boolean;
   toggleModal: (state: boolean) => void;
+  textInputBackgroundColor?: string;
+  toggleBackgroundColor: (color?: string) => void;
 }
 
 class HomeScreen extends Component<Props> {
-  moveTextInput = () => {
+  moveTextInput = (moveTo: number, showModal: boolean) => {
+    const {toggleModal} = this.props;
+
     Animated.timing(animationValue, {
-      toValue: -150,
-      duration: 1500,
+      toValue: moveTo,
+      duration: 1000,
       useNativeDriver: true,
-    }).start();
+    }).start(() => toggleModal(showModal));
   };
 
   handleTextInputPress = () => {
-    this.props.toggleModal(true);
-    this.moveTextInput();
+    const {toggleBackgroundColor} = this.props;
+
+    this.moveTextInput(-148, true);
+    toggleBackgroundColor(colors.lightgrey);
   };
 
-  componentDidMount = () => this.props.toggleModal(false);
+  closeModal = () => {
+    const {toggleModal, toggleBackgroundColor} = this.props;
+
+    this.moveTextInput(0, false);
+    toggleBackgroundColor(colors.white);
+    toggleModal(false);
+  };
 
   render() {
-    const {showModal} = this.props;
+    const {showModal, textInputBackgroundColor} = this.props;
 
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
@@ -57,7 +70,7 @@ class HomeScreen extends Component<Props> {
           style={[
             styles.inputWrapper,
             {transform: [{translateY: animationValue}]},
-            {backgroundColor: showModal ? colors.lightgrey : null},
+            {backgroundColor: textInputBackgroundColor},
           ]}
           onPress={this.handleTextInputPress}>
           <Text style={styles.sayHeyText}>Say "Hey Google"</Text>
@@ -96,12 +109,13 @@ class HomeScreen extends Component<Props> {
           content="Bolt, Uber, OCar and other ride-hailing startups have co..."
           thumbnail={require('../../images/uber.jpeg')}
         />
-
         <SearchItem
           title="Top 3 VS Code Extensions for Python and Data Science"
           content="IDE's are awesome. If you don't know what an IDE is, it..."
           thumbnail={require('../../images/vs_code.jpeg')}
         />
+
+        <Modal visible={showModal} onRequestClose={this.closeModal} />
       </ScrollView>
     );
   }
@@ -109,10 +123,13 @@ class HomeScreen extends Component<Props> {
 
 const mapStateToProps = state => ({
   showModal: state.toggleModal.showModal,
+  textInputBackgroundColor: state.toggleBackgroundColor.color,
 });
 
 const mapDispatchToProps = dispatch => ({
   toggleModal: state => dispatch(showModal(state)),
+  toggleBackgroundColor: color =>
+    dispatch(changeTextInputBackgroundColor(color)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
