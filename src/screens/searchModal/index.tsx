@@ -6,7 +6,10 @@ import {debounce} from 'lodash';
 import {styles} from './styles';
 import SearchItem from './_components/searchItem';
 
-interface Props {}
+interface Props {
+  navigation: any;
+  closeModal: () => void;
+}
 
 interface State {
   text: string;
@@ -28,8 +31,8 @@ export default class SearchModal extends Component<Props, State> {
 
   filterData = debounce(() => {
     const {text, filteredData} = this.state;
-
     this.setState({filteredData: []});
+
     for (const item in mockData) {
       if (item.toLowerCase().includes(text.toLowerCase())) {
         filteredData.push(item);
@@ -40,8 +43,23 @@ export default class SearchModal extends Component<Props, State> {
 
   renderFilteredItems = () => {
     const {filteredData} = this.state;
+    const {
+      navigation: {navigate},
+      closeModal,
+    } = this.props;
 
-    return filteredData.map(item => <SearchItem label={item} />);
+    return filteredData.map(item => (
+      <SearchItem
+        label={item}
+        onPress={() => {
+          closeModal();
+          navigate('ResultScreen', {
+            word: item,
+            definition: mockData[item],
+          });
+        }}
+      />
+    ));
   };
 
   render() {

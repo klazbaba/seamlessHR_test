@@ -25,6 +25,7 @@ interface Props {
   toggleModal: (state: boolean) => void;
   textInputBackgroundColor?: string;
   toggleBackgroundColor: (color?: string) => void;
+  navigation: any;
 }
 
 class HomeScreen extends Component<Props> {
@@ -54,7 +55,7 @@ class HomeScreen extends Component<Props> {
   };
 
   render() {
-    const {showModal, textInputBackgroundColor} = this.props;
+    const {showModal, textInputBackgroundColor, navigation} = this.props;
 
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
@@ -117,7 +118,7 @@ class HomeScreen extends Component<Props> {
         />
 
         <Modal visible={showModal} onRequestClose={this.closeModal}>
-          <SearchModal />
+          <SearchModal navigation={navigation} closeModal={this.closeModal} />
         </Modal>
       </ScrollView>
     );

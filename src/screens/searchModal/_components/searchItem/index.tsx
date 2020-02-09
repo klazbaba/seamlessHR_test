@@ -6,12 +6,13 @@ import {styles} from './styles';
 
 interface Props {
   label: string;
+  onPress: () => void;
 }
 
 export default function SearchItem(props: Props) {
   return (
     <List>
-      <ListItem icon style={styles.listItem}>
+      <ListItem icon style={styles.listItem} onPress={props.onPress}>
         <Left>
           <Icon name="search" style={styles.leftIcon} />
         </Left>

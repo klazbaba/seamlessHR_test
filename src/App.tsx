@@ -6,6 +6,9 @@ const AppStack = createStackNavigator(
     HomeScreen: {
       getScreen: () => require('./screens/homeScreen').default,
     },
+    ResultScreen: {
+      getScreen: () => require('./screens/resultScreen').default,
+    },
   },
   {
     headerMode: 'none',
