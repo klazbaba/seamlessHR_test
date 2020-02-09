@@ -12,9 +12,10 @@ import {Icon, Fab} from 'native-base';
 import {connect} from 'react-redux';
 
 import {styles} from './styles';
-import SearchItem from '../_components/searchItem';
+import SearchItem from './_components/searchItem';
 import {showModal, changeTextInputBackgroundColor} from '../../actions';
 import {colors} from '../../colors';
+import SearchModal from '../searchModal';
 
 const animationValue = new Animated.Value(0);
 const AnimatableTextInput = Animated.createAnimatedComponent(TouchableOpacity);
@@ -32,7 +33,7 @@ class HomeScreen extends Component<Props> {
 
     Animated.timing(animationValue, {
       toValue: moveTo,
-      duration: 1000,
+      duration: 900,
       useNativeDriver: true,
     }).start(() => toggleModal(showModal));
   };
@@ -115,7 +116,9 @@ class HomeScreen extends Component<Props> {
           thumbnail={require('../../images/vs_code.jpeg')}
         />
 
-        <Modal visible={showModal} onRequestClose={this.closeModal} />
+        <Modal visible={showModal} onRequestClose={this.closeModal}>
+          <SearchModal />
+        </Modal>
       </ScrollView>
     );
   }
