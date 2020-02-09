@@ -21,8 +21,8 @@ export default class ResultScreen extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>{this.word}</Text>
-        <Text>{this.definition}</Text>
+        <Text style={styles.title}>{this.word.toUpperCase()}</Text>
+        <Text style={styles.definition}>{this.definition}</Text>
       </View>
     );
   }
