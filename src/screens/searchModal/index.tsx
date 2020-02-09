@@ -48,7 +48,7 @@ export default class SearchModal extends Component<Props, State> {
       closeModal,
     } = this.props;
 
-    return filteredData.map(item => (
+    return filteredData.map((item, index) => (
       <SearchItem
         label={item}
         onPress={() => {
@@ -58,6 +58,7 @@ export default class SearchModal extends Component<Props, State> {
             definition: mockData[item],
           });
         }}
+        key={index}
       />
     ));
   };
